@@ -126,14 +126,18 @@ Task({
 
 //something inside of you, this happens once everyone makes their way back to their chairs...
 
+//4//4//4/4//4//4//4//4//4//4//4//4//4//4//4//4//4//4//4//4//4//4//4//4//4//4//4/
+//4//4//4//4//4//4//4//4//4//4//4//4//4//4//4//4//ACT/4//4//4//4//4//4//4//4//4/
+//4//4//4//4//4//4//4//4//4//4//4//4//4//4/4//4//4//4//4//4//4//4//4//4//4//4//4/
+
 (
 ~fund = 80;
 ~rumble = {Pan2.ar(Mix.ar(SinOsc.ar([~fund,~fund+LFNoise1.kr(0.1,8),~fund+LFNoise1.kr(0.1,8)],0,0.4)))};
 ~squiz = {Blip.ar(~fund,900,1)*EnvGen.ar(Env.perc(0,0.05),Dust.kr(9))!2};
-~rumbler = {PlayBuf.ar(2,d["dj"][1],0.01,1,0,1)*0.4};
+~rumbler = {PlayBuf.ar(2,d["dj"][1],0.03,1,0,1)*0.4};
 Task({
 	~rumble.play;
-	10.wait;
+	20.wait;
 	~squiz.play;
 	40.wait;
 	~rumbler.play;
@@ -156,7 +160,8 @@ Task({
 ~fund = 90;
 //multiplicity
 ~multithumper.fadeTime=0;
-~multithumper = {Splay.ar(Mix.ar(PlayBuf.ar(2,d["plink"][3],Array.fill(6,{rrand(1.3,1.4)}),1,0,1)),1,1)};
+//this needs to be more dramatic
+~multithumper = {Splay.ar(Mix.ar(PlayBuf.ar(2,d["plink"][3],Array.fill(12,{rrand(1.3,1.4)}),1,0,1)),1,1)*2};
 ~multithumper.play;
 )
 
@@ -167,6 +172,7 @@ Task({
 )
 
 (
+//cleanup
 ~hi.clear;
 ~squiz.clear;
 ~rumbler.clear;
@@ -174,7 +180,7 @@ Task({
 )
 
 (
-//when the lifting stops, trigger this
+//when the lifting stops, trigger this, when people are on top of the chairs
 ~multithumper.stop(5);
 )
 
