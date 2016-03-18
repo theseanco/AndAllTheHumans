@@ -127,24 +127,58 @@ Task({
 //something inside of you, this happens once everyone makes their way back to their chairs...
 
 (
-~rumble = {Pan2.ar(Mix.ar(SinOsc.ar([80,80+LFNoise1.kr(0.1,8),80+LFNoise1.kr(0.1,8)],0,0.4)))};
-~squiz = {Blip.ar(80,900,1)*EnvGen.ar(Env.perc(0,0.05),Dust.kr(9))!2};
-~rumbler = {PlayBuf.ar(2,d["dj"][1],0.08,1,0,1)};
-~rumbler.play;
+~fund = 80;
+~rumble = {Pan2.ar(Mix.ar(SinOsc.ar([~fund,~fund+LFNoise1.kr(0.1,8),~fund+LFNoise1.kr(0.1,8)],0,0.4)))};
+~squiz = {Blip.ar(~fund,900,1)*EnvGen.ar(Env.perc(0,0.05),Dust.kr(9))!2};
+~rumbler = {PlayBuf.ar(2,d["dj"][1],0.01,1,0,1)*0.4};
 Task({
 	~rumble.play;
 	10.wait;
 	~squiz.play;
-	10.wait;
+	40.wait;
 	~rumbler.play;
 }).start;
 )
 
+(
+//lizzie moves her chair over to charlie
+~hi = {Splay.ar(SinOsc.ar([~fund*10,~fund*11,~fund*12]*1.5,0,SinOsc.kr(0.1,0,Line.kr(0,0.3,40)).abs))};
+~hi.play;
+)
 
+(
+//when alys's ape thing happens, then this will continue through the lifting
+//TRIGGER THIS WHEN THE SCREAM HAPPENS
+~hi.stop(90);
+~squiz.stop(2);
+~rumbler.stop(2);
+~rumble.stop(30);
+~fund = 90;
+//multiplicity
+~multithumper.fadeTime=0;
+~multithumper = {Splay.ar(Mix.ar(PlayBuf.ar(2,d["plink"][3],Array.fill(6,{rrand(1.3,1.4)}),1,0,1)),1,1)};
+~multithumper.play;
+)
 
+(
+//when the lifting happens
+~multithumper2 = {Splay.ar(Mix.ar(PlayBuf.ar(2,d["plink"][3],Array.fill(3,{rrand(0.3,0.4)}),1,0,1)),1,1)};
+~multithumper2.play;
+)
 
+(
+~hi.clear;
+~squiz.clear;
+~rumbler.clear;
+~rumble.clear;
+)
 
-MIDIFunc.trace(false)
+(
+//when the lifting stops, trigger this
+~multithumper.stop(5);
+)
+
+//NEXT FILE
 
 
 
