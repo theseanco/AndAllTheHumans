@@ -112,6 +112,7 @@ p.clock.tempo=132/60
 //Rosie's beats, post-invocation - needs cleaning up.
 //these fade down towards the end of the section as they're eating rosie
 (
+//TRIGGER THIS WHEN ROSIE SAYS FUCK
 ~k = Pbind(\instrument,\bplay,\buf,d["k2"][1],\dur,1,\amp,1);
 ~h = Pbind(\instrument,\bplay,\buf,d["h"][1],\dur,Pseq([0.75,Pseq([2,2,2,2,1.25,0.75],inf)],inf),\amp,1,\rate,Pseq([0.5,0.5,0.5,0.5,0.5,0.5,0.45,0.4].stutter(2),inf)*2);
 ~sn = Pbind(\instrument,\bplay,\buf,d["cp"][8],\dur,Pseq([0.5,Pseq([2,2,4,2],inf)],inf),\amp,2,\rate,1);
