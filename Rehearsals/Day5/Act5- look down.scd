@@ -61,7 +61,7 @@ Task({
 
 
 (
-//at the end of the WJRF section
+//at the end of the WJRF section, trigger this when chairs are in a circle and people standing around the outside
 ~likeme.stop(2);
 ~likeme2.stop(4);
 ~multithumper2.stop(8);

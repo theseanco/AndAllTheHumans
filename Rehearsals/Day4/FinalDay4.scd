@@ -155,7 +155,7 @@ Task({
 
 (
 //when alys's ape thing happens, then this will continue through the lifting
-//TRIGGER THIS WHEN THE SCREAM HAPPENS
+//TRIGGER THIS WHEN PEOPLE SCREAM INTO EACH OTHERS CHESTS
 ~hi.stop(90);
 ~squiz.stop(2);
 ~rumbler.stop(2);
@@ -169,7 +169,7 @@ Task({
 )
 
 (
-//when the lifting happens
+//when the lifting happens trigger this
 ~multithumper2 = {Splay.ar(Mix.ar(PlayBuf.ar(2,d["plink"][3],Array.fill(3,{rrand(0.3,0.4)}),1,0,1)),1,1)};
 ~multithumper2.play;
 )

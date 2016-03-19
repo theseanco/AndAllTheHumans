@@ -184,7 +184,9 @@ c.knob3.onChanged = {|msg| "fundamental 3rd =  ".post; ~fund = msg.linlin(0,127,
 c.knob4.onChanged = {|msg| "fundamental 4rd =  ".post; ~fund = msg.linlin(0,127,1600,90.00).asInt.postln};
 )
 
-//delete this later,
+//delete this later
+~fund.fadeTime=10
+~fund = 5000
 
 (
 //cleanup

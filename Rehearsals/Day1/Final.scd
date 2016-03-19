@@ -135,7 +135,7 @@ Task({
 	~cb.fadeTime=8;
 	30.do({
 		~cb = Pbind(\instrument,\bplaym,\buf,d["cb"][rrand(0,1)],\dur,1/3,\amp,1);
-		3.3.wait;
+		rrand(1,4.0).wait;
 	});
 }).start;
 );

@@ -40,6 +40,6 @@ Task({
 	s.sync; // wait for samples
 	q.start([57121, 57122]);        // start listening on port 57120 and 57121
 	3.wait;
-	"done!".postln
+	"Setup done!".postln;
 }).start;
 )

@@ -54,7 +54,7 @@ c.knob6.onChanged = {|val| "BITRATE = ".post; ~gperc.set(\bit,val.linlin(0,127,1
 // //RISSET RHYTHM DURING FIGHT SCENE. I need a cue.
 // //definitely after Alys vomiting though.
 //
-// b = Buffer.read(s,"/home/smc/Documents/Samples/SpokenUtopia/DrumGroove/SUNTUNNELSdrumsgrooveOne87bpm.wav"); // Provide a simple breakbeat loop
+b = Buffer.read(s,"/home/smc/Documents/Samples/SpokenUtopia/DrumGroove/SUNTUNNELSdrumsgrooveOne87bpm.wav"); // Provide a simple breakbeat loop
 // (
 // var ampTable = Signal.hanningWindow(1024,100).squared;
 // var ampBuf = Buffer.loadCollection(s, ampTable);
@@ -86,6 +86,7 @@ c.knob6.onChanged = {|val| "BITRATE = ".post; ~gperc.set(\bit,val.linlin(0,127,1
 // q.stop
 
 //trigger THIS when fight starts
+b = Buffer.read(s,"/home/smc/Documents/Samples/SpokenUtopia/DrumGroove/SUNTUNNELSdrumsgrooveOne87bpm.wav"); // Provide a simple breakbeat loop
 (
 var ampTable = Signal.hanningWindow(1024,100).squared;
 var ampBuf = Buffer.loadCollection(s, ampTable);
@@ -103,14 +104,14 @@ var ampBuf = Buffer.loadCollection(s, ampTable);
 };
 ~risset.play;
 c.fader1.onChanged = {|val| "rissetvol = ".post; ~risset.set(\amp,val.linlin(0,127,0,1).postln;)};
-)
-
-
-//delete this later
 (
-~risset.clear;
-~rissetline.clear;
+~siner.stop(20);
+~gperc.stop(20);
+~vperc.stop(2);
 )
+)
+
+
 
 //fadeout of risset drums at end of war.
 (
