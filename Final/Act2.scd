@@ -1,27 +1,4 @@
-(
-//messing around with filters, ends up overdriven
-~ol = {Pan2.ar(BHiPass.ar(SawDPW.ar(110*SinOsc.ar(SinOsc.kr(SinOsc.kr),0,SinOsc.kr(310,0,90*LFNoise1.kr)),0,SinOsc.kr(290,0,0.2)),SinOsc.kr(SinOsc.kr(330,0,230)),SinOsc.kr(990,0,1)),LFNoise1.kr)};
-~ol.play;
-)
-
-
-//off-kilter drums
-(
-~tone = Pbind(\instrument,\bplay,\buf,Prand(d["trap"],inf),\dur,Pwhite(0.01,0.5),\amp,0.4,\rate,8);
-~ttwo = Pbind(\instrument,\bplay,\buf,Prand(d["trap"],inf),\dur,Pwhite(0.01,0.5),\amp,0.4,\rate,1);
-~tthree = Pbind(\instrument,\bplay,\buf,Prand(d["h"],inf),\amp,0.4,\dur,Pwhite(0.125,0.75).round(0.125));
-~tfour = Pbind(\instrument,\bplay,\buf,Prand(d["cp"],inf),\amp,0.4,\dur,Pwhite(1,8));
-
-~tone.play;
-~ttwo.play;
-~tthree.play;
-~tfour.play;
-)
-
-s.scope
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -104,7 +81,7 @@ Task({
 //play on second bounce
 ~hatter2.play;
 
-//trigger this when people move out of the second set of bounces
+//trigger this when ROSIE moves out of the second set of bounces
 (
 ~kicker2 = Pbind(\instrument,\bplay,\buf,d["k"][0],\dur,Pbjorklund2(3,8)/10,\amp,1,\rate,Pwrand([0.9,1],[0.9,0.1],inf));
 ~snarer2 = Pbind(\instrument,\bplay,\buf,d["sn"][4],\dur,Pbjorklund2(5,8)/2.5,\amp,1);
@@ -118,33 +95,20 @@ Task({
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // WHEN    LIZZIE'S    HANDS    TOUCH    THE    FLOOR !!!!!!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-~kicker2.stop;
-~snarer2.stop;
-~hatter2.stop;
-~hatter.stop;
-~snarer.stop;
-~kicker2.stop;
-~kicker.stop;
-~postdance.stop;
+~kicker2.stop(1);
+~snarer2.stop(1);
+~hatter2.stop(1);
+~hatter.stop(1);
+~snarer.stop(1);
+~kicker2.stop(1);
+~kicker.stop(1);
+~postdance.stop(1);
 )
-
-(
-//delete later
-~kicker2.start;
-~snarer2.start;
-~hatter2.start;
-~hatter.start;
-~snarer.start;
-~kicker2.start;
-~kicker.start;
-~postdance.start;
-)
-
 
 //immediately when lizzie starts again, possibly turn this into a task.
 (
 ~jumparound = { Pan2.ar(HPF.ar(LatoocarfianN.ar(
-    SampleRate.ir/4,
+    SampleRate.ir/2,
     LFNoise2.kr(2,1.5,1.5),
     LFNoise2.kr(2,1.5,1.5),
     LFNoise2.kr(2,0.5,1.5),
@@ -154,8 +118,8 @@ Task({
 ~putdown = {SinOsc.ar([~fund,~fund*1.01],0,XLine.kr(0.00001,0.8,40))};
 ~putdown.play;
 )
-p.fadeTime=0
 
+~jumparound.stop
 (
 //clear all of the hits & kicks
 ~kicker2.clear;
@@ -177,22 +141,18 @@ p.fadeTime=0
 (
 //giving away a bit of yourself, when chairs are in a line
 //add a volume limiter on fundmover, it resonates a bit too much.
+// on hip sway, turn knob 1, then 2, then 3
 ~likeme.stop(10);
 ~likeme2.stop(20);
 ~putdown.stop(30);
-~fundmover = {GVerb.ar(Mix.ar([SinOscFB.ar((LFSaw.kr([LFNoise1.kr(0.1,1).abs,LFNoise1.kr(0.1,1).neg]).range(~fund,~fund*10).round(~fund))/2,SinOsc.kr(0.1).abs,XLine.kr(0.0001,0.6,20))]),20,10,0.3,0.5,30,SinOsc.kr(0.1).range(0,0.7))};
+~fundmover = {GVerb.ar(Mix.ar([SinOscFB.ar((LFSaw.kr([LFNoise1.kr(0.1,1).abs,LFNoise1.kr(0.1,1).neg]).range(~fund,~fund*10).round(~fund))/2,SinOsc.kr(0.1).abs,Line.kr(0,0.2,20))]),20,30,0.7,0.5,30,SinOsc.kr(0.1).range(0.3,0.7)).flat};
 ~fundmover.play;
 ~fund.fadeTime=1;
-// on hip sway, turn knob 1, then 2, then 3
 c.knob1.onChanged = {|msg| "fundamental =  ".post; ~fund = msg.linlin(0,127,80,200).asInt.postln};
 c.knob2.onChanged = {|msg| "fundamental 2nd =  ".post; ~fund = msg.linlin(0,127,200,800).asInt.postln};
 c.knob3.onChanged = {|msg| "fundamental 3rd =  ".post; ~fund = msg.linlin(0,127,800,1600).asInt.postln};
-c.knob4.onChanged = {|msg| "fundamental 4rd =  ".post; ~fund = msg.linlin(0,127,1600,90.00).asInt.postln};
+c.knob4.onChanged = {|msg| "fundamental 4rd =  ".post; ~fund = msg.linlin(0,127,1600,9000).asInt.postln};
 )
-
-//delete this later
-~fund.fadeTime=10
-~fund = 5000
 
 (
 //cleanup
@@ -208,6 +168,6 @@ c.knob4.onChanged = {|msg| "fundamental 4rd =  ".post; ~fund = msg.linlin(0,127,
 //!!
 //SCREAM
 //!!
-~fundmover.clear;
-{GVerb.ar(EnvGen.ar(Env.perc(0.01,0.01),1,8,0,1,0),15,30,0.5,0.5,15)}.play;
+~fundmover.stop(1);
+{GVerb.ar(EnvGen.ar(Env.perc(0,0.01),1,8,0,1,0),35,60,0.5,0.5,15)}.play;
 )

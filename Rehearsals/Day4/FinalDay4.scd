@@ -6,6 +6,7 @@
 
 p.fadeTime=3;
 
+MIDIFunc.trace(false)
 
 //stop drone
 ~drone.stop(3)
@@ -14,23 +15,32 @@ p.fadeTime=3;
 ~partymusic.fadeTime=0;
 ~effectparty.fadeTime=0;
 ~partysine.fadeTime=0;
-~partymusic = {arg speed = 0.98; PlayBuf.ar(2,d["party"][0],speed,1,0,1)*1.4};
+~partymusic = {arg speed = 1; PlayBuf.ar(2,d["party"][0],speed,1,0,1)*1.4};
 ~effectparty = {
 	arg waveloss = 1, bit = 24, srate = 44100, freq = 440, res = 0.999999, xfade = (-1), type = 0;
 	var sig = Decimator.ar(WaveLoss.ar(~partymusic.ar,waveloss,40,1),srate,bit);
 	XFade2.ar(sig,DFM1.ar(sig,SinOsc.ar(0.01).range(100,3000),res,1,type),xfade);
+
 };
+~partysine = {1};
+// ~partysine.fadeTime=0.1;.
 ~partymusic.set(\speed,~partysine);
 ~effectparty.play;
+)
+
+
+//As the dance scene continues, gradually modulate filter on knob 3 and 4, gradually decrease speed on knob 2
+
+//as things get more fucked up, ratchet the speed down and increase waveloss using knob 1.
+
+(
+//here are the controls
 c.knob1.onChanged = {|val| "waveloss = ".post; ~effectparty.set(\waveloss,val.linlin(0,127,40,0).asInt.postln;)};
 c.knob2.onChanged = {|val| "musicspeed = ".post; ~partysine = val.linlin(0,127,0.15,1).postln;};
 c.knob3.onChanged = {|val| "filterwet = ".post; ~effectparty.set(\xfade,val.linlin(0,127,-1,1.0).postln;)};
 c.knob4.onChanged = {|val| "filtertype = ".post; ~effectparty.set(\type,val.linlin(0,127,0,1.0).postln;)};
 )
 
-//As the dance scene continues, gradually modulate filter on knob 3 and 4, gradually decrease speed on knob 2
-
-//as things get more fucked up, ratchet the speed down and increase waveloss using knob 1.
 
 //By the smack scene things need to be very slow with a lot of waveloss. There's some optional speed code going on VVVV
 
@@ -50,7 +60,7 @@ c.knob4.onChanged = {|val| "filtertype = ".post; ~effectparty.set(\type,val.linl
 ~effectparty.stop(10);
 )
 
-
+//TODO: Smack scene transition tidyup
 
 
 //everyone has moved away
@@ -121,10 +131,10 @@ Task({
 )
 
 (
-//trigger this when
-~march.stop;
-~whine.stop;
-~thump.stop;
+//trigger this when peter s.
+~march.stop(5);
+~whine.stop(10);
+~thump.stop(15);
 )
 
 //something inside of you, this happens once everyone makes their way back to their chairs...
@@ -154,7 +164,7 @@ Task({
 )
 
 (
-//when alys's ape thing happens, then this will continue through the lifting
+
 //TRIGGER THIS WHEN PEOPLE SCREAM INTO EACH OTHERS CHESTS
 ~hi.stop(90);
 ~squiz.stop(2);

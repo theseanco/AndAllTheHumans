@@ -13,7 +13,7 @@ d1 silence
 
 -- pattern7, improved breakbeats
 d1 $ stack [
-degradeBy 0 $ sometimesBy 0.8 (|*| speed "2.2") $ sometimesBy 0.7 (|+| speed "0.8") $ sometimesBy 0.7 (|+| coarse "2 5 8 6") $ randcat [sound (samples "akuma2*8" (irand(10))),sound (samples "akuma1*8" (irand(10))),sound (samples "akuma3*8" (irand(10))),sound (samples "akuma4*8" (irand(10)))] # unit "c" # speed "8" # gain "1.4",
+degradeBy 1 $ sometimesBy 0.1 (|*| speed "2.2") $ sometimesBy 0.2 (|+| speed "0.8") $ randcat [sound (samples "akuma2*8" (irand(10))),sound (samples "akuma1*8" (irand(10))),sound (samples "akuma3*8" (irand(10))),sound (samples "akuma4*8" (irand(10)))] # unit "c" # speed "8" # gain "1.4",
 sound "ek:4 ~ ~ ~ ~ ek:4 ~ ~" # gain "1.8",
 sound "~ ~ esn:5 ~ ~ ~ esn:5 ~" # gain "1.7"
 ]

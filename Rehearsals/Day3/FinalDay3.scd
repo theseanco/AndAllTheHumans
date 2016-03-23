@@ -134,7 +134,7 @@ TODO:
 ~childchaos = Pbind(\instrument,\bplay,\buf,d["k2"][2],\amp,1.3,\dur,Pwhite(0.5,2.0))
 )
 
-//musical chairs:
+//musical chairs, when alysia drops chair:
 
 //1
 (

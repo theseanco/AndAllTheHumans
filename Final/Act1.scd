@@ -11,25 +11,15 @@ Task({
 }).start;
 )
 
-
-p.fadeTime=3;
-
-//clear first set of things, when the clap happens
 (
-Task({
-	1.do({
-		~one.stop(20);
-		~pperc.stop(20);
-		20.wait;
-		~one.clear;
-		~pperc.clear;
-		~ppercw.clear;
-	});
-}).start;
+//when alysia breathes
+~breath = {Pan2.ar(RHPF.ar(WhiteNoise.ar(Line.kr(0.01,0.03,2)),LFNoise1.ar(2).range(7000,15000),0.2),LFNoise1.kr(0.1,0.6))};
+~breath.play;
 )
 
+//trigger dust and lizbass in anticipation of clap. SET FADERS 1 and 2 TO MINIMUM
 
-//dust
+//WHEN PEOPLE START SINGING TO THEMSELVES
 
 
 (
@@ -54,12 +44,20 @@ c.fader3.onChanged = {|val| ~thebirds.vol=val.linlin(0,127,0,1.5)};
 )
 
 (
-//set fader 1 and 2 to minimum, lizbass happens when al claps
+//set fader 1 and 2 to minimum, knobs 3 and 4 to minimum. lizbass happens when people sing.
 ~lizbass.play;
 ~lizbass2lpf.play;
+//also trigger this
+Task({
+	~one.stop(20);
+	~pperc.stop(20);
+	~breath.stop(20);
+	20.wait;
+	~one.clear;
+	~pperc.clear;
+	~ppercw.clear;
+}).start;
 )
-
-MIDIFunc.trace
 
 (
 //chaos
@@ -69,21 +67,26 @@ c.fader2.onChanged = {|val| "acc. bass vol: ".post; ~lizbass.vol=val.linlin(0,12
 )
 
 
-//lizbass part 2, in theory making lizbass part 1 more rhythmic, but i'm not really happy with this yet.
-(
-p.clock.tempo=90/60;
-~lizbass3 = Pbind(\instrument,\multiwave,\focus,1,\which,3,\amp,3,\dur,Pwhite(1,8)/4,\rel,0.1,\scale,Scale.minor,\degree,Pwhite(0,4),\scale,Scale.minorPentatonic,\octave,3);
-~h0 = Pbind(\instrument,\bplay,\buf,d["k2"][0],\rate,2,\amp,0.5,\dur,Pwhite(4,6));
-
-~h0.stop;
-~lizbass3.clear
-)
-
 (
 //set fader 1 and 2 to minimum, start with no modulation, then when Lizzie stops with the Accordion play with modulation and fade out chords
 ~lizbass.play;
 ~lizbass2lpf.play;
 )
+
+
+/*
+
+
+FADE OUT LIZ BASS WHEN PEOPLE HAVE A TINY HUG
+
+GET READY FOR BEATS TRIGGERED WHEN ROSIE HAS A GO
+
+|||||||||||||||||||||||||||||||||||||||||||||
+|||||||||||||||||||||||||||||||||||||||||||||
+|||||||||||||||||||||||||||||||||||||||||||||
+VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+
+*/
 
 
 (
@@ -104,14 +107,18 @@ p.clock.tempo=132/60
 //Rosie's beats, post-invocation - needs cleaning up.
 //these fade down towards the end of the section as they're eating rosie
 (
-//TRIGGER THIS WHEN ROSIE SAYS FUCK
+//TRIGGER THIS WHEN ROSIE WALKS BACK TO LIZZIE - SHE IS NO LONGER SAYING ANYTHING
 ~k = Pbind(\instrument,\bplay,\buf,d["k2"][1],\dur,1,\amp,1);
 ~h = Pbind(\instrument,\bplay,\buf,d["h"][1],\dur,Pseq([0.75,Pseq([2,2,2,2,1.25,0.75],inf)],inf),\amp,1,\rate,Pseq([0.5,0.5,0.5,0.5,0.5,0.5,0.45,0.4].stutter(2),inf)*2);
 ~sn = Pbind(\instrument,\bplay,\buf,d["cp"][8],\dur,Pseq([0.5,Pseq([2,2,4,2],inf)],inf),\amp,2,\rate,1);
 ~rbass = Pbind(\instrument,\sinfb,\dur,Pwhite(1,4)/4,\rel,0.2,\amp,1,\scale,Scale.minorPentatonic,\degree,Place([0,0,[1,2,3],[4,4,5]],inf),\octave,Pwrand([3,2],[0.8,0.2],inf).stutter(2),\fb,Pwhite(0,0.2));
 ~gab = Pbind(\instrument,\bplay,\buf,d["k2"][3],\dur,Pwhite(4,8),\amp,1,\rate,0.8);
 ~hats = Pbind(\instrument,\bplay,\buf,d["h"][0],\dur,Pseq([1/3,1/3,(3+1/3)],inf),\amp,1,\rate,Pwrand([1.2,1],[0.1,0.9],inf));
-~bloop = Pbind(\instrument,\bplay,\buf,d["p2"][5],\dur,Pseq([7,2,2],inf)/6,\rate,Pwrand([2,1],[0.8,0.2],inf).stutter(3));
+// ~bloop = Pbind(\instrument,\bpl.ay,\buf,d["p2"][5],\dur,Pseq([7,2,2],inf)/6,\rate,Pwrand([2,1],[0.8,0.2],inf).stutter(3));
+~vibrations = {arg width = 0.6; LeakDC.ar(Pan2.ar(LPF.ar(Pulse.ar(~tempo.kr*16,width,2),9000)))};
+c.fader1.onChanged = {|val| "vibvol = ".post; ~vibrations.vol=val.linlin(0,127,0,1.5).postln;};
+~vibrations.vol = 0;
+c.knob1.onChanged = {|val| "vibwidth = ".post; ~vibrations.set(\width,val.linlin(0,127,0.001,0.5).postln;)};
 (
 Task({
 	~k.play;
@@ -125,8 +132,8 @@ Task({
 	40.wait;
 	~cb.play;
 	~cb.fadeTime=8;
-	30.do({
-		~cb = Pbind(\instrument,\bplaym,\buf,d["cb"][rrand(0,1)],\dur,1/3,\amp,1);
+	50.do({
+		~cb = Pbind(\instrument,\bplaym,\buf,d["cb"][rrand(0,1)],\dur,Prand([1/3,1/6],inf),\amp,1);
 		rrand(1,4.0).wait;
 	});
 }).start;
@@ -137,6 +144,15 @@ c.rewindBt.onPress = {p.clock.tempo=120/60};
 c.loopBt.onPress = {p.clock.tempo=126/60};
 c.ffwBt.onPress = {p.clock.tempo=132/60};
 )
+
+Quarks.gui
+
+//SET FADER ONE AND KNOB ONE TO ZERO!
+//Then fade it up and modulate when there are vibrations
+//TURN OFF WHEN THE MASKS ARE DROPPED
+~vibrations.play;
+//ZERO ZERO ZERO
+
 
 //when rosie is eaten
 (
@@ -150,6 +166,7 @@ Task({
 	120.wait;
 	~gab.clear;
 	~k.clear;
+	~vibrations.clear;
 	~cb.clear;
 	~sn.clear;
 	~hats.clear;

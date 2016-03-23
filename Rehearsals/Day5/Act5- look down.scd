@@ -129,7 +129,7 @@ Task({
 
 //not happy with this.
 //very provisional
-(
+
 
 /*
 p.clock.tempo=122/60;
@@ -151,8 +151,8 @@ p.clock.tempo=122/60;
 
 
 (
-~sugar3 = {arg speed = -0.3; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0)*2.5};
-~sugar4 = {arg speed = -0.3; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0)*2.5};
+~sugar3 = {arg speed = -0.3; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0)*1.25};
+~sugar4 = {arg speed = -0.3; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0)*1.25};
 )
 
 /*
@@ -164,27 +164,30 @@ p.clock.tempo=122/60;
 ~part5.play
 */
 
-
+(
 ~sugar3.play;
+~sugar4.play;
 )
 
 (
 //when peter starts playing
 ~sugar3.stop(5);
+~sugar4.stop(5);
 )
 
 (
 //just before peter stops playing;
 (
-~sugar3 = {arg speed = -0.3; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0)*2.5};
-~sugar4 = {arg speed = -0.3; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0)*2.5};
+~sugar3 = {arg speed = -0.15; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0)*2.5};
+~sugar4 = {arg speed = 0.15; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0)*2.5};
 ~sugar3.play;
 ~sugar4.play;
 )
 )
 
 (
+//something.
 ~sugar3.stop(20);
 ~sugar4.stop(20);
-
+)
 
