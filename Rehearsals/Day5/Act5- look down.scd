@@ -11,23 +11,28 @@ Task({
 )
 
 (
+//people bloom more in their chairs - PETER IS IN FRONT OF ME
+~bloom = {Pulse.ar([~fund*LFNoise1.kr(0.1).range(10.0001,10.1),~fund*LFNoise1.kr(0.1).range(10.0001,10.1)],SinOsc.kr(XLine.kr(0.01,~fund*10,40)).range(0.000001,Line.kr(0.06,0.2,40)),Line.kr(0,0.2,5))};
+~bloom.play;
+)
+
+
+(
 //cleanup
 ~multithumper.clear;
 )
 
 
-
 (
-//People back in chairs after moving
-// !!!!!! PAY ATTENTION !!!!!!!
-//trigger every time there's an action
-//top button 1 for high, 2 for low
-//low when moving away from the chair, hi when moing back, mid when in between
-//modulate divergence on the high plink with knob 1 (start at lowest value)
+//as people walk to the chairs
 ~likeme.stop(5);
 ~likeme2.stop(5);
+~bloom.stop(9);
 ~multithumper2.stop(5);
+)
 
+(
+//trigger this WHEN PEOPLE SIT DOWN, particularly when Alys looks composed.
 c.knob1.onChanged = {|val| c.topBt1.onPress = {10.do{{PlayBuf.ar(2,d["plink"][0],rrand(1,val.linlin(0,127,1.01,1.2)),1,0,0,2)}.play;}}; "hi divergence = ".post; val.postln;};
 
 //hi
@@ -38,6 +43,17 @@ c.topBt2.onPress = {10.do{{PlayBuf.ar(2,d["plink"][0],rrand(0.1,0.11),1,0,0,2)}.
 
 //mid
 c.topBt3.onPress = {100.do{{PlayBuf.ar(2,d["plink"][0],rrand(0.5,0.51),1,0,0,2)}.play;}};
+
+p.clock.tempo = 105/60;
+
+//DONE
+
+~one = Pbind(\instrument,\bplay,\buf,d["plink"][0],\dur,Pseq([0!10,4].flat,11),\rate,Pwhite(0.1,0.11),\amp,0.7);
+
+~two = Pbind(\instrument,\bplay,\buf,d["plink"][0],\dur,Pseq([2,Pseq([0!10,4].flat,10)],1),\rate,Pwhite(1,1.1),\amp,Pseq([0,Pseq([0.7],inf)],inf));
+
+~two.play;
+~one.play;
 )
 
 (
@@ -65,7 +81,7 @@ Task({
 ~likeme.stop(2);
 ~likeme2.stop(4);
 ~multithumper2.stop(8);
-~wjrf.stop(12);
+~wjrf.stop(8);
 )
 
 //Alysia's dance of death
@@ -87,7 +103,7 @@ Task({
 )
 
 (
-//more, when people begin to pop back up after going down
+//more, when people start getting killed
 ~kik = Pbind(\instrument,\bplay,\buf,d["bang"][0],\amp,2,\dur,Pwhite(0.5,2.5).round(0.5));
 )
 
@@ -105,6 +121,7 @@ Task({
 
 
 (
+//When alysia hits after falling backwards trigger this
 //Palindromic transition, takes 36 seconds
 ~sugar = {arg speed = 3; PlayBuf.ar(2,d["sugarplum"][0],speed,1,0,0,0)*1.2};
 ~sugar2 = {arg speed = -3; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,0,0)*1.2};
@@ -127,67 +144,46 @@ Task({
 
 ///////////////////////////////////////////////////////////////
 
-//not happy with this.
-//very provisional
-
-
-/*
-p.clock.tempo=122/60;
-~fund = {SinOsc.kr(0.1).range(50,60)};
-~part0 = Pbind(\instrument,\sinfb,\dur,Pwhite(2,6),\freq,Pkr(~fund)*Pwhite(0.97,1.03),\amp,Pwhite(0.3,0.5),\sus,0.4,\rel,0.001,\atk,0,\fb,Pseq((50..110).mirror,inf)/100);
-~part1 = Pbind(\instrument,\multiwave,\dur,4,\freq,Pkr(~fund)*Prand([4,6,8],inf),\amp,0.4,\rel,0.5,\atk,0,\rel,0.001,\sus,0.1);
-~part2 = Pbind(\instrument,\multiwave,\dur,Pwhite(1,8),\freq,Pkr(~fund)*Prand([4,6,8],inf),\amp,0.4,\rel,0.5,\atk,0,\rel,0.001,\sus,0.1,\which,3);
-~part3 = Pbind(\instrument,\multiwave,\dur,Pwhite(1,8),\freq,Pkr(~fund)*Prand([4,6,8],inf),\amp,0.4,\rel,0.5,\atk,0,\rel,0.001,\sus,0.1,\which,7);
-~part4 = Pbind(\instrument,\multiwave,\dur,Pwhite(1,8.0)/2,\freq,Pkr(~fund)*Prand([2,3,4,5],inf),\amp,0.4,\atk,0,\rel,0.001,\sus,0.05,\which,3,\focus,9,\fb,3);
-~part5 = Pbind(\instrument,\multiwave,\dur,Pwhite(1,8.0)/4,\freq,Pkr(~fund)*(Prand([2,3,4,5],inf))*8,\amp,0.4,\rel,0.001,\atk,0,\rel,0.001,\sus,0.01,\which,3,\focus,9,\fb,3);
-*/
-
-/*
-~warp1 = {Warp1.ar(2,d["plink"][0],SinOsc.kr(0.04),0.5,0.2,interp:4)*0.5}
-~warp2 = {Warp1.ar(2,d["plink"][0],SinOsc.kr(0.041),0.25,0.2,interp:4)*0.5}
-~warp3 = {Warp1.ar(2,d["plink"][0],SinOsc.kr(0.05),1,0.2,interp:4)*0.5}
-
-*/
-
-
 (
-~sugar3 = {arg speed = -0.3; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0)*1.25};
-~sugar4 = {arg speed = -0.3; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0)*1.25};
-)
-
-/*
-~part0.play;
-~part1.play;
-~part2.play;
-~part3.play;
-~part4.play;
-~part5.play
-*/
-
-(
+//After the ties go over the backs of the chairs trigger this.
+~sugar3 = {arg speed = 0.3; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0)};
+~sugar4 = {arg speed = -0.3; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0)};
+~sugar5 = {arg speed = 0.3; PitchShift.ar(PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0),0.2,4,0.01,0.01)*1.9};
+~sugar6 = {arg speed = -0.3; PitchShift.ar(PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0),0.2,4,0.01,0.01)*1.9};
 ~sugar3.play;
 ~sugar4.play;
 )
 
 (
-//when peter starts playing
-~sugar3.stop(5);
-~sugar4.stop(5);
+//when peter starts laughing
+~sugar5.play;
+~sugar6.play;
 )
 
 (
-//just before peter stops playing;
+//WHEN CHARLIE PRESSES THE TRIGGER!!!!!
+~sugar3.fadeTime=1;
+~sugar4.fadeTime=1;
+~sugar5.stop(1);
+~sugar6.stop(1);
+{GVerb.ar(EnvGen.ar(Env.perc(0,0.01),1,8,0,1,0),190,3,0.5,0.5,15,1,0.7,0.5,300,3)*EnvGen.ar(Env.asr(0,100,0),1,1,0,1,2)}.play;
+~sugar3 = {arg speed = -0.03; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-666666,1,0)*2.5};
+~sugar4 = {arg speed = 0.03; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-666666,1,0)*2.5};
+)
+
 (
-~sugar3 = {arg speed = -0.15; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0)*2.5};
-~sugar4 = {arg speed = 0.15; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0)*2.5};
+//When peter starts playing
+(
+~sugar3 = {arg speed = -0.03; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-666666,1,0)*4.5};
+~sugar4 = {arg speed = 0.03; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-666666,1,0)*4.5};
 ~sugar3.play;
 ~sugar4.play;
 )
 )
 
 (
-//something.
-~sugar3.stop(20);
-~sugar4.stop(20);
+//when peter changes tunes
+~sugar3.stop(2);
+~sugar4.stop(2));
 )
 

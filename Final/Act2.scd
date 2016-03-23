@@ -169,5 +169,5 @@ c.knob4.onChanged = {|msg| "fundamental 4rd =  ".post; ~fund = msg.linlin(0,127,
 //SCREAM
 //!!
 ~fundmover.stop(1);
-{GVerb.ar(EnvGen.ar(Env.perc(0,0.01),1,8,0,1,0),35,60,0.5,0.5,15)}.play;
+{GVerb.ar(EnvGen.ar(Env.perc(0,0.01),1,8,0,1,0),90,3,0.5,0.5,15)}.play;
 )

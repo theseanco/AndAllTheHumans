@@ -24,7 +24,7 @@ MIDIFunc.trace(false)
 };
 ~partysine = {1};
 // ~partysine.fadeTime=0.1;.
-~partymusic.set(\speed,~partysine);
+// ~partymusic.set(\speed,~partysine);
 ~effectparty.play;
 )
 
@@ -89,6 +89,7 @@ p.clock.tempo=135/60;
 ~stab2.play;
 ~stab3.play;
 
+
 (
 //trigger when howling
 ~k.stop(15);
@@ -131,7 +132,7 @@ Task({
 )
 
 (
-//trigger this when peter s.
+//trigger this when peter comes puts the suits down.
 ~march.stop(5);
 ~whine.stop(10);
 ~thump.stop(15);
@@ -144,6 +145,7 @@ Task({
 //4//4//4//4//4//4//4//4//4//4//4//4//4//4/4//4//4//4//4//4//4//4//4//4//4//4//4/
 
 (
+//when peter crucifixes
 ~fund = 80;
 ~rumble = {Pan2.ar(Mix.ar(SinOsc.ar([~fund,~fund+LFNoise1.kr(0.1,8),~fund+LFNoise1.kr(0.1,8)],0,0.4)))};
 ~squiz = {Blip.ar(~fund,900,1)*EnvGen.ar(Env.perc(0,0.05),Dust.kr(9))!2};
@@ -164,7 +166,6 @@ Task({
 )
 
 (
-
 //TRIGGER THIS WHEN PEOPLE SCREAM INTO EACH OTHERS CHESTS
 ~hi.stop(90);
 ~squiz.stop(2);
