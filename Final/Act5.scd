@@ -35,10 +35,13 @@
 ~sugar6 = {arg speed = -0.3; PitchShift.ar(PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0),0.2,4,0.01,0.01)*1.9};
 ~sugar3.play;
 ~sugar4.play;
+c.fader1.onChanged = {|val| "plum1vol = ".post; ~sugar5.vol=val.linlin(0,127,0,1).postln;};
+c.fader2.onChanged = {|val| "plum2vol = ".post; ~sugar6.vol=val.linlin(0,127,0,1).postln;};
 )
 
 (
-//when peter starts laughing
+//SET FADERS 1 and 2 TO ZERO
+//when peter starts laughing, fade up 1 and 2
 ~sugar5.play;
 ~sugar6.play;
 )
@@ -55,22 +58,12 @@
 )
 
 (
-//When peter starts playing
-(
-~sugar3 = {arg speed = -0.03; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-666666,1,0)*4.5};
-~sugar4 = {arg speed = 0.03; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-666666,1,0)*4.5};
-~sugar3.play;
-~sugar4.play;
-)
-)
-
-(
 //when peter changes tunes
 ~sugar3.stop(2);
 ~sugar4.stop(2);
 )
 
-//AFTER THE HOWLING, this is the trigger
+//After the howling has gone on for a bit, trigger this.
 {GVerb.ar(EnvGen.ar(Env.perc(0,0.0001),1,8,0,1,0),300,90,0.5,0.5,15,0.1,1,0.9,300,3)*EnvGen.ar(Env.asr(0,100,0),1,1,0,1,2)}.play;
 
 //On the start of each set of vibrations

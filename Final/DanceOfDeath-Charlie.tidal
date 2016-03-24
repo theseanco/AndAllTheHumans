@@ -1,0 +1,15 @@
+d1 <- stream "127.0.0.1" 57121 dirt {timestamp = BundleStamp, latency = 0.1}
+
+cps 0.78
+
+--increase cps when dancers are in a line in front of me
+cps 1
+
+d1 silence
+
+-- Start the degradeBy 1 and gradtually decrease the degredation to bring in the breakbeat as charlie gets more frenetic
+d1 $ stack [
+degradeBy 1 $ sometimesBy 0.1 (|*| speed "2.2") $ sometimesBy 0.2 (|+| speed "0.8") $ randcat [sound (samples "akuma2*8" (irand(10))),sound (samples "akuma1*8" (irand(10))),sound (samples "akuma3*8" (irand(10))),sound (samples "akuma4*8" (irand(10)))] # unit "c" # speed "8" # gain "1.4",
+sound "ek:4 ~ ~ ~ ~ ek:4 ~ ~" # gain "1.8",
+sound "~ ~ esn:5 ~ ~ ~ esn:5 ~" # gain "1.7"
+]
