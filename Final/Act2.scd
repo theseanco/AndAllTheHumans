@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////// ACT TWO
 
 
 
@@ -25,7 +25,7 @@ p.clock.tempo=1;
 		//Charlie, wobbly going up and down
 		DFM1.ar(SawDPW.ar(~fund*4+Vibrato.kr,0,0.3),~fund*2+SinOsc.kr(LFNoise1.kr(0.1,10),0,0.2),LFNoise1.kr(0.1,1.2),1.4,0,0,0.6),
 		//alysia, slow draw-out movements
-		DFM1.ar(SinOsc.ar(~fund,0,0.4),~fund/2,SinOsc.kr(0.01,0,1.3).abs,1,0,0,1),
+		DFM1.ar(SinOsc.ar(~fund,0,0.3),~fund/2,SinOsc.kr(0.01,0,1.3).abs,1,0,0,1),
 		//rosie, stressing out
 		WaveLoss.ar(DFM1.ar(SawDPW.ar(~fund*8,0,0.4),~fund*4,LFNoise1.kr(4,1),1,0,0),LFNoise1.kr(9).range(1,10),11,2),
 		//lizzie & alys unaccounted for as yet
@@ -57,6 +57,7 @@ Task({
 
 
 //as people start reaching out, begin to modulate the fundamental
+//try and trigger this at the shortest wave point, to disguise the transition.
 (
 ~fund.fadeTime=20;
 ~wtask = Task({
@@ -83,7 +84,7 @@ Task({
 
 //trigger this when ROSIE moves out of the second set of bounces
 (
-~kicker2 = Pbind(\instrument,\bplay,\buf,d["k"][0],\dur,Pbjorklund2(3,8)/10,\amp,1,\rate,Pwrand([0.9,1],[0.9,0.1],inf));
+~kicker2 = Pbind(\instrument,\bplay,\buf,d["k"][0],\dur,Pbjorklund2(3,8,inf,Pwhite(1,7).asStream)/10,\amp,1,\rate,Pwrand([0.9,1],[0.9,0.1],inf));
 ~snarer2 = Pbind(\instrument,\bplay,\buf,d["sn"][4],\dur,Pbjorklund2(5,8)/2.5,\amp,1);
 ~kicker2.play;
 ~snarer2.play;
@@ -119,9 +120,10 @@ Task({
 ~putdown.play;
 )
 
-~jumparound.stop
+
 (
-//clear all of the hits & kicks
+//need something when Alys's hands touch the floor, maybe something to stop.
+//THIS.
 ~kicker2.clear;
 ~snarer2.clear;
 ~hatter2.clear;
@@ -130,11 +132,6 @@ Task({
 ~kicker2.clear;
 ~kicker.clear;
 ~postdance.clear;
-)
-
-(
-//need something when Alys's hands touch the floor, maybe something to stop.
-//THIS.
 ~jumparound.stop(5);
 )
 
@@ -169,5 +166,5 @@ c.knob4.onChanged = {|msg| "fundamental 4rd =  ".post; ~fund = msg.linlin(0,127,
 //SCREAM
 //!!
 ~fundmover.stop(1);
-{GVerb.ar(EnvGen.ar(Env.perc(0,0.01),1,8,0,1,0),90,3,0.5,0.5,15)}.play;
+{GVerb.ar(EnvGen.ar(Env.perc(0,0.01),1,8,0,1,0),90,30,0.5,0.5,15)}.play;
 )

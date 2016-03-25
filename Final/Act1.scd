@@ -44,7 +44,7 @@ c.fader3.onChanged = {|val| ~thebirds.vol=val.linlin(0,127,0,1.5)};
 )
 
 (
-//set fader 1 and 2 to minimum, knobs 3 and 4 to minimum. lizbass happens when people sing.
+//set fader 1 and 2 to minimum, knobs 2 and 3 to minimum. lizbass happens when people sing to their hands.
 ~lizbass.play;
 ~lizbass2lpf.play;
 //also trigger this
@@ -147,14 +147,22 @@ c.ffwBt.onPress = {p.clock.tempo=132/60};
 
 Quarks.gui
 
+
+/*
+
+REMOVED
+
 //SET FADER ONE AND KNOB ONE TO ZERO!
 //Then fade it up and modulate when there are vibrations
+//ROSIE OSCILLATES BACK AND FORTH
 //TURN OFF WHEN THE MASKS ARE DROPPED
 ~vibrations.play;
 //ZERO ZERO ZERO
 
+*/
 
-//when rosie is eaten
+
+//when lizzie et al go in for the second time
 (
 Task({
 	~gab.stop(60);

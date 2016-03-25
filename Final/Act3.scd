@@ -26,32 +26,21 @@ c.knob6.onChanged = {|val| "BITRATE = ".post; ~gperc.set(\bit,val.linlin(0,127,1
 
 ~vperc.stop;
 //Turn down knob four, three full, two quarter, one three quarter
-// five empty, six empty, modulate five.
-
-
-//after Charlie's speech
-//as squirming happens, gradually decreae duration
-(
-~siner = Pbind(\instrument,\sinfb,\dur,0.8,\atk,1,\rel,1,\scale,Scale.chromatic24(Tuning.et24),\root,-3,\degree,Pseq((0..24),inf),\octave,Pwrand([5,4,3],[5,2,1].normalizeSum,inf));
-~siner.play;
-)
-
+// five full, six full, modulate five.
 
 
 (
-~siner.stop(20);
 ~gperc.stop(20);
 ~vperc.stop(2);
 )
 
-//cleanup
+//cleanup. THIS ONE IS IMPORTANT BECAUSE IT'S COMPUTATIONALLY QUITE EXPENSIVE
 (
-~siner.clear;
 ~gperc.clear;
 ~vperc.clear;
 )
 
-//trigger THIS when fight starts
+//trigger THIS immediately, THEN WAIT FOR ALYS TO VOMIT AND TRIGGER BEATS
 b = Buffer.read(s,"/home/smc/Documents/Samples/SpokenUtopia/DrumGroove/SUNTUNNELSdrumsgrooveOne87bpm.wav"); // Provide a simple breakbeat loop
 (
 var ampTable = Signal.hanningWindow(1024,100).squared;
@@ -63,12 +52,13 @@ var ampBuf = Buffer.loadCollection(s, ampTable);
 	posses = (pos + ((0..4)/5)).wrap(0.0, 1.0); // Evenly spaced circularly within 0 to 1
  	pitches = (0.2 * 2.0.pow(posses * 5));
 	amps = BufRd.kr(1, ampBuf.bufnum, posses * BufFrames.ir(ampBuf.bufnum));
-	sons = (PlayBuf.ar(1, b, pitches.poll(1), loop:1) * amps * 10);
+	sons = (PlayBuf.ar(1, b, pitches, loop:1) * amps * 10);
 	Out.ar(0,
 		Pan2.ar(sons.mean.softclip,0,amp)
 	)
 };
 ~risset.play;
+~rissetline = {1};
 c.fader1.onChanged = {|val| "rissetvol = ".post; ~risset.set(\amp,val.linlin(0,127,0,1).postln;)};
 (
 ~siner.stop(20);
@@ -77,10 +67,12 @@ c.fader1.onChanged = {|val| "rissetvol = ".post; ~risset.set(\amp,val.linlin(0,1
 )
 )
 
-//when peter starts moving rosie off of her chair, trigger this to fade out to silence
+
+
+//when alicia moves her chair
 //fadeout of risset drums at end of war.
 (
-~rissetline = {Line.kr(1,0,10)};
+~rissetline = {Line.kr(1,0,6)};
 ~risset.set(\amp,~rissetline);
 )
 
@@ -88,6 +80,7 @@ c.fader1.onChanged = {|val| "rissetvol = ".post; ~risset.set(\amp,val.linlin(0,1
 
 //then there's the child's birthday party section...
 (
+p.clock.tempo=1;
 ~childrums = Pbind(\instrument,\bplay,\buf,d["k"][2],\dur,Pseq([1,0.5],inf)/3,\amp,1,\rate,Pseq([1,0.8],inf));
 ~childhats = Pbind(\instrument,\bplay,\buf,d["h"][5],\dur,0.5,\rate,0.8,\amp,1);
 ~childsnare = Pbind(\instrument,\bplay,\buf,d["sn"][4],\rate,5,\dur,1/3/2,\amp,1);
@@ -103,8 +96,9 @@ c.fader1.onChanged = {|val| "rissetvol = ".post; ~risset.set(\amp,val.linlin(0,1
 ~risset.clear;
 )
 
+(
 ~childrums.stop;
-
+)
 
 //2
 (
@@ -165,7 +159,7 @@ c.fader1.onChanged = {|val| "rissetvol = ".post; ~risset.set(\amp,val.linlin(0,1
 ~childsnare.stop(5);
 ~childperc.stop(5);
 ~childchaos.stop(5);
-~drone = Pbind(\instrument,\sinfb,\dur,1,\degree,Pwrand([0,2,4,6],[2,2,2,0.5].normalizeSum,inf),\atk,3,\rel,3,\scale,Scale.minor,\root,4,\octave,4,\fb,Pexprand(0.00001,0.6));
+~drone = Pbind(\instrument,\sinfb,\dur,1,\degree,Pwrand([0,2,4],[5,2,2].normalizeSum,inf),\atk,3,\rel,3,\scale,Scale.minor,\root,-3,\octave,Pwrand([5,4],[5,0.5].normalizeSum,inf),\fb,Pexprand(0.00001,0.6));
 ~drone.play;
 )
 
@@ -173,7 +167,7 @@ c.fader1.onChanged = {|val| "rissetvol = ".post; ~risset.set(\amp,val.linlin(0,1
 
 //shit party begins
 
-//set knob 1 and 2 and 4 to full, 3 to empty
+//set knob 1 and 2 to full, 3 to empty
 
 p.fadeTime=3;
 
@@ -193,7 +187,8 @@ MIDIFunc.trace(false)
 	XFade2.ar(sig,DFM1.ar(sig,SinOsc.ar(0.01).range(100,3000),res,1,type),xfade);
 
 };
-~partysine = {1};
+~partysine = 1;
+~partymusic.set(\speed,~partysine);
 // ~partysine.fadeTime=0.1;.
 // ~partymusic.set(\speed,~partysine);
 ~effectparty.play;
@@ -209,7 +204,6 @@ MIDIFunc.trace(false)
 c.knob1.onChanged = {|val| "waveloss = ".post; ~effectparty.set(\waveloss,val.linlin(0,127,40,0).asInt.postln;)};
 c.knob2.onChanged = {|val| "musicspeed = ".post; ~partysine = val.linlin(0,127,0.15,1).postln;};
 c.knob3.onChanged = {|val| "filterwet = ".post; ~effectparty.set(\xfade,val.linlin(0,127,-1,1.0).postln;)};
-c.knob4.onChanged = {|val| "filtertype = ".post; ~effectparty.set(\type,val.linlin(0,127,0,1.0).postln;)};
 )
 
 
@@ -227,6 +221,7 @@ c.knob4.onChanged = {|val| "filtertype = ".post; ~effectparty.set(\type,val.linl
 ///////OPTIONAL END
 
 (
+//WALK BACKWARDS WAVING
 ~partymusic.stop(10);
 ~effectparty.stop(10);
 )
@@ -238,6 +233,7 @@ c.knob4.onChanged = {|val| "filtertype = ".post; ~effectparty.set(\type,val.linl
 
 //redux of disco music
 (
+//TRIGGER THIS WHEN EVERYONE IS NEAR ME
 p.clock.tempo=135/60;
 ~k = Pbind(\instrument,\bplay,\buf,d["k"][0],\dur,1,\amp,1);
 ~h = Pbind(\instrument,\bplay,\buf,d["h"][1],\dur,Pseq([0.5,Pseq([1],inf)],inf),\amp,1);
@@ -247,11 +243,11 @@ p.clock.tempo=135/60;
 ~stab3 = Pbind(\instrument,\bplay,\buf,d["edmstab"][0],\dur,Pbjorklund2(Pwhite(2,15),16)/8,\amp,1,\rate,Pseq([1,1,0.9,1.1].stutter(3),inf)*4);
 ~sweep = Pbind(\instrument,\bplay,\buf,d["edmsweep"][0],\amp,4,\dur,32);
 ~disco = Pbind(\instrument,\bplay,\buf,d["dj"][0],\amp,1,\dur,40);
+~k.play;
 )
 
 //dance music starts, gradually bring these things in
 //clear sets of two eights, every other eight.
-~k.play;
 ~sweep.play;
 ~h.play;
 ~sn.play;
@@ -262,7 +258,7 @@ p.clock.tempo=135/60;
 
 
 (
-//trigger when howling
+//trigger when everyone looks at rosie
 ~k.stop(15);
 ~sweep.stop(8);
 ~h.stop(8);

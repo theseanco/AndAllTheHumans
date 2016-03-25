@@ -27,6 +27,8 @@
 
 ///////////////////////////////////////////////////////////////
 
+//SET FADER 9 TO FULL
+
 (
 //After the ties go over the backs of the chairs trigger this.
 ~sugar3 = {arg speed = 0.3; PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0)};
@@ -35,9 +37,11 @@
 ~sugar6 = {arg speed = -0.3; PitchShift.ar(PlayBuf.ar(2,d["sugarplum"][0],speed,1,BufSamples.ir(d["sugarplum"][0])-1,1,0),0.2,4,0.01,0.01)*1.9};
 ~sugar3.play;
 ~sugar4.play;
-c.fader1.onChanged = {|val| "plum1vol = ".post; ~sugar5.vol=val.linlin(0,127,0,1).postln;};
-c.fader2.onChanged = {|val| "plum2vol = ".post; ~sugar6.vol=val.linlin(0,127,0,1).postln;};
+c.fader1.onChanged = {|val| "plum1vol = ".post; ~sugar5.vol=val.linlin(0,127,0,1.5).postln;};
+c.fader2.onChanged = {|val| "plum2vol = ".post; ~sugar6.vol=val.linlin(0,127,0,1.5).postln;};
+c.fader9.onChanged = {|val| "lizziefade = ".post; ~sugar4.vol=val.linlin(0,127,0,1.5); ~sugar3.vol=val.linlin(0,127,0,1.5).postln;};
 )
+
 
 (
 //SET FADERS 1 and 2 TO ZERO
@@ -64,52 +68,49 @@ c.fader2.onChanged = {|val| "plum2vol = ".post; ~sugar6.vol=val.linlin(0,127,0,1
 )
 
 //After the howling has gone on for a bit, trigger this.
-{GVerb.ar(EnvGen.ar(Env.perc(0,0.0001),1,8,0,1,0),300,90,0.5,0.5,15,0.1,1,0.9,300,3)*EnvGen.ar(Env.asr(0,100,0),1,1,0,1,2)}.play;
+{GVerb.ar(EnvGen.ar(Env.perc(0,0.0001),1,8,0,1,0),300,10,0.5,0.5,15,0.1,1,0.9,300,3)*EnvGen.ar(Env.asr(0,100,0),1,1,0,1,2)}.play;
 
 //On the start of each set of vibrations
 //First one is after hands down
-{LPF.ar(LeakDC.ar(GVerb.ar(EnvGen.ar(Env.perc(0,0.1),1,8,0,1,0),30,10,0.5,0.5,15,0.1,1,0.9,300,3)),700)*EnvGen.ar(Env.asr(0,100,0),1,1,0,1,2)}.play;
+{LPF.ar(LeakDC.ar(GVerb.ar(EnvGen.ar(Env.perc(0,0.1),1,8,0,1,0),30,9,0.5,0.5,15,0.1,1,0.9,300,5)),700)*EnvGen.ar(Env.asr(0,100,0),1,1,0,1,2)}.play;
 
 //second one after pause
-{LPF.ar(LeakDC.ar(GVerb.ar(EnvGen.ar(Env.perc(0,0.1),1,8,0,1,0),30,15,0.5,0.5,15,0.1,1,0.9,300,3)),700)*EnvGen.ar(Env.asr(0,100,0),1,1,0,1,2)}.play;
+{LPF.ar(LeakDC.ar(GVerb.ar(EnvGen.ar(Env.perc(0,0.1),1,8,0,1,0),30,14,0.5,0.5,15,0.1,1,0.9,300,5)),700)*EnvGen.ar(Env.asr(0,100,0),1,1,0,1,2)}.play;
 
 //third one after pause
-{HPF.ar(LeakDC.ar(GVerb.ar(EnvGen.ar(Env.perc(0,1),1,8,0,1,0),30,20,0.5,0.5,15,0.1,1,0.9,300,3)),3000)*EnvGen.ar(Env.asr(0,100,0),1,1,0,1,2)}.play;
+{HPF.ar(LeakDC.ar(GVerb.ar(EnvGen.ar(Env.perc(0,1),1,8,0,1,0),30,19,0.5,0.5,15,0.1,1,0.9,300,5)),3000)*EnvGen.ar(Env.asr(0,100,0),1,1,0,1,2)}.play;
 
 (
 //ceilidh music, scratched old '78.
 
 //Everyone has just vibrated, then they unbutton their shirts
-//THEN TRIGGER THIS
+//THEN TRIGGER THIS WHEN ROSIE UNBUTTONS HERS
 ~ceilidh = {arg speed = 0.9; Pan2.ar(PlayBuf.ar(1,d["newceilidh"][0],speed,1,6*44100,1,0),0,1.9)};
 ~ceilidh.play;
 ~cline = {0.9};
-
+c.fader1.onChanged = {|val| "ceilidh1vol = ".post; ~ceilidh.vol=val.linlin(0,127,1,3.4).postln;};
 //maybe this needs to be degraded, but it's already been reversed once, this is something to consider...
 ~evilceilidh = {arg speed = 0.1; Pan2.ar(PlayBuf.ar(1,d["newceilidh"][0],speed,1,0,1,0),0,1.4)};
 ~evilceilidh.play
 )
 
-~evilceilidh.clear
-
 (
-//about to go
-//trigger this when lizzie starts hugging her chair
+//drop this when lizzie jumps in the middle
 ~cline = {0.9};
-~cline = {Line.kr(0.9,1,1.2)};
+~cline = {Line.kr(0.9,1.2,80)};
 ~ceilidh.set(\speed,~cline);
 )
 
-
-(
-//drop this when lizzie jumps in the middle
-~cline = {Line.kr(0.9,1.2,60)};
-)
+//SET FADER 2 TO MINIMUM
 
 (
 ~ceilidh.fadeTime=10;
+~evilceilidh.stop(10);
 ~ceilidh = {arg speed = 0.9; Pan2.ar(PlayBuf.ar(1,d["newceilidh"][0],0.2,1,120*44100,1,0),0,1.9)};
 ~ceilidh2 = {arg speed = 0.9; Pan2.ar(PitchShift.ar(PitchShift.ar(PlayBuf.ar(1,d["newceilidh"][0],0.2,1,120*44100,1,0),0.2,4,0,0.04),0.2,4,0,0.04),0,1.9)};
+~ceilidh2.vol = 0;
+c.fader1.onChanged = {|val| "ceilidh1vol = ".post; ~ceilidh.vol=val.linlin(0,127,0,3.4).postln;};
+c.fader2.onChanged = {|val| "ceilidh2vol = ".post; ~ceilidh2.vol=val.linlin(0,127,0,1.5).postln;};
 ~ceilidh2.play;
 ~ceilidh.play;
 )

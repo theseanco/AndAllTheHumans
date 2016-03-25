@@ -10,6 +10,8 @@ Loads SynthDefs
 Activates StageLimiter
 
 NB: StageLimiter requires BatLib quark
+NanoKontrol
+
 
 */
 
